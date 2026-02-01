@@ -1,0 +1,19 @@
+on:
+  workflow_dispatch:
+jobs:
+  id:
+    runs-on: macos-latest
+    env:
+      GH_TOKEN: 0
+    steps:
+      - run: |
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+          -activate -configure -access -on \
+          -restart -agent -privs -all && \
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+          -configure -clientopts -setvnclegacy -vnclegacy yes \
+          -configure -clientopts -setvncpw -vncpw 'mypassword' && \
+          sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on && \
+          sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /System/Library/CoreServices/RemoteManagement/ARDAgent.app && \
+          sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /System/Library/CoreServices/RemoteManagement/ARDAgent.app && \
+          netstat -an | grep 5900
