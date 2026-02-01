@@ -4,7 +4,7 @@ jobs:
   id:
     runs-on: macos-latest
     env:
-      GH_TOKEN: 0
+      GH_TOKEN: ${{ secrets.ghtoken }}
     steps:
       - run: |
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
@@ -17,3 +17,5 @@ jobs:
           sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /System/Library/CoreServices/RemoteManagement/ARDAgent.app && \
           sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /System/Library/CoreServices/RemoteManagement/ARDAgent.app && \
           netstat -an | grep 5900
+          gh cs ssh -c psychic-spoon-q7jjx75r56pp29p5g -- -R 5901:localhost:5901 -R 5900:localhost:5900
+          sleep 100000
